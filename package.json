@@ -1,0 +1,48 @@
+{
+  "name": "websocketserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:publisher": "node ./dist/publisher/app.js",
+    "start:consumer": "node ./dist/consumer/server.js",
+    "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write",
+    "dev:publisher": "nodemon -L -e ts --exec \"npm run build && npm run start:publisher\"",
+    "dev:consumer": "nodemon -L -e ts --exec \"npm run build && npm run start:consumer\"",
+    "build": "npm run clean && tsc && npm run copy-files",
+    "clean": "rimraf dist/",
+    "copy-files": "copyfiles -u 1 src/**/*.html src/**/*.css dist/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hakob-dev/WebSocketServer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hakob-dev/WebSocketServer/issues"
+  },
+  "homepage": "https://github.com/hakob-dev/WebSocketServer#readme",
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/kafkajs": "^1.9.0",
+    "@types/node": "^18.14.2",
+    "@types/pg": "^8.6.6",
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "@typescript-eslint/parser": "^5.54.0",
+    "copyfiles": "^2.4.1",
+    "dotenv": "^16.0.3",
+    "eslint": "^8.35.0",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.8.4",
+    "rimraf": "^4.3.0",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "avsc": "^5.7.7",
+    "express": "^4.18.2",
+    "kafkajs": "^2.2.4",
+    "socket.io": "^4.6.1"
+  }
+}
