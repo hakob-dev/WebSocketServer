@@ -1,4 +1,4 @@
-import { Kafka } from 'kafkajs';
+import { Kafka, RecordMetadata } from 'kafkajs';
 import schema from '../schema';
 import dotenv from 'dotenv';
 
@@ -19,29 +19,33 @@ async function startPublisher() {
     console.log(err);
   }
 
-  setInterval(async () => {
-    try {
-      const recordMeta = await producer.send({
-        topic: process.env.KAFKA_TOPIC as string,
-        messages: [
-          {
-            value: schema.toBuffer({
-              randomId: Math.floor(Math.random() * 100),
-              title: 'Dummy title'
-            })
-          }
-        ]
-      });
-      console.log(
-        'published: ',
-        recordMeta
-          .map((r) => `${r.baseOffset}th record in ${r.topicName}`)
-          .join('')
-      );
-    } catch (err) {
-      console.log('Error while publishing', err);
-    }
-  }, 3_000);
+  setInterval(publish, 3_000);
+}
+
+async function publish() {
+  try {
+    const recordMeta = await producer.send({
+      topic: process.env.KAFKA_TOPIC as string,
+      messages: [
+        {
+          value: schema.toBuffer({
+            randomId: Math.floor(Math.random() * 100),
+            title: 'Dummy title'
+          })
+        }
+      ]
+    });
+    logRecord(recordMeta);
+  } catch (err) {
+    console.log('Error while publishing', err);
+  }
+}
+
+function logRecord(recordMeta: RecordMetadata[]) {
+  console.log(
+    'published: ',
+    recordMeta.map((r) => `${r.baseOffset}th record in ${r.topicName}`).join('')
+  );
 }
 
 startPublisher();
